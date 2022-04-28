@@ -1,2 +1,5 @@
 es\albertomarquez\proyectocsv\App.class
+es\albertomarquez\proyectocsv\Exportacion.class
 module-info.class
+es\albertomarquez\proyectocsv\Dato.class
+es\albertomarquez\proyectocsv\Operaciones.class
