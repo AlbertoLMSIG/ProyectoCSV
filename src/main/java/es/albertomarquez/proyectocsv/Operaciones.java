@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -17,12 +18,15 @@ public class Operaciones {
     String anno = "";
     String pA = "";
     boolean yearB = true;
+    boolean alerta = false;
+    boolean guardarDatos = false;
     int sumaParo;
     int cont = 0;
     float media;
     
     String seleccionPais = "";
     String seleccionAnno = "";
+    String derechos = "";
     
     public void calculoDato(Pane proot){
     
@@ -91,12 +95,6 @@ public class Operaciones {
                 dato.setPais(valores[0]);
                 dato.setAnno(valores[2]);
                 dato.setderechosHumanos(valores[3]);
-
-                System.out.println("Pais: "+dato.getPais());
-                System.out.println("Año: "+dato.getAnno());
-                System.out.println("Porcentaje de derechos: "+dato.getderechosHumanos());
-                System.out.println("#####################################"); 
-
                 if(!pA.equals(dato.getPais()) && !dato.getPais().equals("Entity")){
 
                     lista.add(pA);
@@ -137,12 +135,20 @@ public class Operaciones {
             }   
         }
         
-        //BOTON
+        //BOTON Buscar
         Button buscar = new Button();
         buscar.setLayoutX(470);
         buscar.setLayoutY(100);
         buscar.setText("Buscar");
         proot.getChildren().add(buscar);
+        
+        //BOTON GUARDAR
+        Button guardar = new Button("GUARDAR");
+        guardar.setLayoutX(540);
+        guardar.setLayoutY(100);
+        guardar.setText("Guardar");
+        proot.getChildren().add(guardar);
+       
         
          //PORCENTAJE DERECHOS HUMANOS
         Label porcDerechosH = new Label();
@@ -168,14 +174,25 @@ public class Operaciones {
                     dato.setPais(valores[0]);
                     dato.setAnno(valores[2]);
                     dato.setderechosHumanos(valores[3]);
-                    texto2 = br2.readLine();
+                    
                     
                     if(seleccionPais.equals(dato.getPais()) && seleccionAnno.equals(dato.getAnno())){
-                        porcDerechosH.setText("El porcentaje de los derechos humanos obtenido es de "+dato.getderechosHumanos());
-                        //System.out.println("el porcentaje obtenido es "+dato.getderechosHumanos());
+                        derechos = dato.getderechosHumanos();
+                        alerta = true;
                     }
-                    
-                }    
+                    texto2 = br2.readLine();
+                } 
+                if (alerta == true){
+                        porcDerechosH.setText("El porcentaje de los derechos humanos obtenido es de "+derechos);
+                        alerta = false;            
+                }else{
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error");
+                        alert.setHeaderText("No hay ese tipo de datos");
+                        alert.setContentText("Ooops, fijate bien y rellena todo los campos");
+                        alert.showAndWait();
+                }
+                guardarDatos = true;
             }   
             catch (FileNotFoundException ex) { 
                 System.out.println("Error: Fichero no encontrado");
@@ -197,6 +214,20 @@ public class Operaciones {
                 }   
             } 
         });
+        
+        guardar.setOnAction(t -> {
+            if (guardarDatos == true){   
+                Exportacion.exportarCSV(seleccionPais, seleccionAnno, derechos);
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Datos Guardados");
+                alert.setHeaderText("Se han guardado exitosamente en el fichero");
+                alert.setContentText("Se han escrito los datos correctamente de su seleccion" );
+                alert.showAndWait();
+            }
+        
+        
+        });
+        
     }
 }
 

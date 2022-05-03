@@ -6,20 +6,20 @@ import java.io.FileWriter;
 public class Exportacion {
     
  
-    public static void exportarCSV(float media, String seleccionPais){
-        String nombreFichero = "export/media_atentados.csv";
-        String textoEncabezado = "Pais,Media de atentados ";
-        String textoDatos = seleccionPais+","+media;
+    public static void exportarCSV(String seleccionPais, String seleccionAnno, String derechos){
+        String nombreFichero = "media_derechos.csv";
+        String textoEncabezado = "Pais,Año,Porecentaje de derechos ";
+        String textoDatos = seleccionPais+","+seleccionAnno+","+derechos;
         //String texto = "Media de atentados en "+seleccionPais+" a lo largo de la historia: "+media;
-        BufferedWriter bw = null;
+        BufferedWriter w = null;
         
         try {
         //Crear un objeto BufferedWriter. Si ya existe el fichero, 
         //  se borra automáticamente su contenido anterior.
-            bw = new BufferedWriter(new FileWriter(nombreFichero));
+            w = new BufferedWriter(new FileWriter(nombreFichero));
         //Escribir en el fichero el texto con un salto de línea
-            bw.write(textoEncabezado + "\n");
-            bw.write(textoDatos + "\n");
+            w.write(textoEncabezado + "\n");
+            w.write(textoDatos + "\n");
         }
         // Comprobar si se ha producido algún error
         catch(Exception ex) {
@@ -30,8 +30,8 @@ public class Exportacion {
         finally {
             try {
                 // Cerrar el fichero si se ha podido abrir
-                if(bw != null)
-                    bw.close();
+                if(w != null)
+                    w.close();
             }
             catch (Exception ex) {
                 System.out.println("Error al cerrar el fichero");
